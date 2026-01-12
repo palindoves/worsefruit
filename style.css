@@ -1,0 +1,38 @@
+:root {
+    --black:#0f000;
+}
+
+body {
+    
+}
+
+.container{
+    width:80%;
+    margin:auto;
+    display:flex;
+    background:rgb(0,0,0,0.2);
+}
+
+.infopanel{
+    background:rgb(0,0,0,0.2);
+    margin:10px;
+    flex-grow:4;
+}
+
+.trackhold{
+    background:rgb(0,0,0,0.2);
+    margin:10px;
+    display:grid;
+    grid-template-columns: auto auto;
+}
+
+.track {
+    border: 2px black solid;
+    height:40vw;
+}
+
+canvas {
+    background:white;
+    height:40vw;
+    width:5vw;
+}
