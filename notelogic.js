@@ -1,32 +1,83 @@
 
+class Track {
+    constructor(id) {
+        this.id = id;
+        this.canvas = document.getElementById(id);
+        this.ctx = this.canvas.getContext("2d"); 
+        this.vel = 6.7;
+        this.hit = this.y + 5; // property of note
+        this.running = false
 
-let track1 = document.getElementById("can1");
-let track2 = document.getElementById("can2");
-let track3 = document.getElementById("can3");
-let track4 = document.getElementById("can4");
+        this.notes = [];
 
-const ctx1 = can1.getContext("2d");
-const ctx2 = can2.getContext("2d");
-const ctx3 = can3.getContext("2d");
-const ctx4 = can4.getContext("2d");
-//I really don't like this. It looks bad and awful and horrible and I don't like it. But consider this. what if I set up classes later and not right now. What if I did that. Huh. Take that liberals.
-
-var testY = 0;
-let dy = 2;
-
-function noteFall() {
-    ctx1.clearRect(0,0,track1.width,track1.height)
-    ctx1.fillStyle = "rgb 000/60%";
-    ctx1.fillRect (0, testY, 550, 5);
-    testY+=dy;
-
-    if (testY > 130) { 
-        testY = 0;
+        this.sendNote = this.sendNote.bind(this);
+        this.judgeSpawn = this.judgeSpawn.bind(this);
     }
 
-    requestAnimationFrame(noteFall);
+    judgeSpawn() {
+        this.ctx.fillStyle = "rgb 000/10%";
+        this.ctx.fillRect(0, 130, 550, 500)
+    }
+
+    spawnNote() {
+        this.notes.push(-5);
+    }
+
+    sendNote() {
+        this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height)
+
+        //respawn judgement line
+        this.ctx.fillStyle = "rgb 000/10%";
+        this.ctx.fillRect(0, 130, 550, 500)
+
+        this.ctx.fillStyle = "rgb 000/60%";
+        
+
+        for (let i = 0; i < this.notes.length; i++) {
+            this.notes[i] += this.vel;
+            this.ctx.fillRect(0, this.notes[i], 550, 5);
+        }
+
+        this.notes = this.notes.filter(y => y <= 150);
+
+        requestAnimationFrame(this.sendNote);
+    }
+
+    playback() {
+        if (this.running) return;
+        this.running = true;
+        requestAnimationFrame(this.judgeSpawn);
+        requestAnimationFrame(this.sendNote);
+    }
+
 }
 
-requestAnimationFrame(noteFall);
+const t1 = new Track("can1");
+t1.playback();
+const t2 = new Track("can2");
+t2.playback();
+const t3 = new Track("can3");
+t3.playback();
+const t4 = new Track("can4");
+t4.playback();
 
-// Yet again. We Make This A Class Fn Later
+
+document.addEventListener("keydown", (event) => {
+    if(event.key === 'a' || event.key === "A") {
+        t1.spawnNote();
+    }
+
+    if(event.key === 's' || event.key === "S") {
+        t2.spawnNote();
+    }
+
+    if(event.key === 'k' || event.key === "K") {
+        t3.spawnNote();
+    }
+
+    if(event.key === 'l' || event.key === "L") {
+        t4.spawnNote();
+    }
+});
+
+//I still don't like this but ueuehehghhhh
